@@ -1,0 +1,173 @@
+Curso - Django-Rest_Framework
+
+Documentação: https://www.django-rest-framework.org
+
+-Pelo VSCODE, terminal, acesse o diretório do projeto;
+-Crie um ambiente virtual no diretório com o seguinte comando: python -m venv venv
+-Comando para ativar o ambiente virtual: .\venv\Scripts\Activate.ps1
+-Comando para instalar a biblioteca: pip install djangorestframework
+
+-Comando para startar o projeto: django-admin startproject api_todo
+
+-No seguinte diretório: api_todo\api_todo, procure pelo arquivo: settings e edite pelo VSCODE
+-No campo INSTALLED_APPS, deixe conforme abaixo:
+
+INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    # libs
+    'rest_framework',
+]
+
+-Acesse o diretório do projeto: cd D:\Github\django-rest\curso-django-rest\api_todo
+-Digite o seguinte comando para criar a aplicação: python manage.py startapp app
+-No campo INSTALLED_APPS, deixe conforme abaixo:
+
+INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    # apps
+    'app',
+    # libs
+    'rest_framework',
+]
+
+-Acesse o diretório do projeto: cd D:\Github\django-rest\curso-django-rest\api_todo\api_todo\app
+-Edite o arquivo: models.py
+
+from django.db import models
+
+class Todo(models.Model):
+    name = models.CharField(max_length=120)
+    done = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+-Digite o seguinte comando: python manage.py makemigrations
+-Digite o seguinte comando: python manage.py migrate
+-Digite o seguinte comando: python manage.py shell
+-Digite >>> from app.models import Todo
+-Digite >>> exit
+
+-Digite o seguinte comando para instalar a biblioteca: pip install ipython
+-Digite o seguinte comanhdo: python manage.py shell
+-Digite: from app.models import Todo
+-Digite: todo = Todo()
+-Digite: todo.name = 'Acordar cedo.'
+-Digite: todo.save()
+-Digite: todo.__dict__
+
+-Acesse o diretório do projeto: cd D:\Github\django-rest\curso-django-rest\api_todo\api_todo\app
+-Crie um arquivo: serializers.py
+-Edite o arquivo conforme o texto abaixo: 
+
+from app.models import Todo
+from rest_framework import serializers
+
+class TodoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Todo
+        fields = ['id', 'name', 'done', 'created_at']
+
+-Digite o seguinte comanhdo: python manage.py shell
+-Digite: from app.models import Todo
+-Digite: from app.serializers import TodoSerializer
+-Digite: todo = Todo.objects.first()
+-Digite: serializer = TodoSerializer(todo)
+-Digite: serializer.data
+
+-Edite o arquivo views.py no diretório do projeto: cd D:\Github\django-rest\curso-django-rest\api_todo\api_todo\app
+
+from app.models import Todo
+from app.serializers import TodoSerializer
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+@api_view (['GET'])
+def todo_list(request):
+    todo = Todo.objects.all()
+    serializer = TodoSerializer(todo, many=True)
+    return Response(serializer.data)
+
+-Acesse o diretório do projeto: cd D:\Github\django-rest\curso-django-rest\api_todo\api_todo\app
+-Crie um arquivo: urls.py
+-Edite o arquivo conforme o texto abaixo: 
+
+from app.views import todo_list
+
+from django.urls import path
+
+urlpatterns = [
+    path('', todo_list)
+]
+
+-Acesse o diretório do projeto: cd D:\Github\django-rest\curso-django-rest\api_todo\api_todo\urls.py
+-Edite o arquivo: urls.py
+
+"""
+URL configuration for api_todo project.
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/4.2/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path('todo/', include('app.urls')),
+]
+
+-Comando para iniciar o servidor: python manage.py runserver
+-Acesse o app pela seguinte url: http://127.0.0.1:8000/todo/
+
+-Edite o arquivo views.py no diretório do projeto: cd D:\Github\django-rest\curso-django-rest\api_todo\api_todo\app
+
+from app.models import Todo
+from app.serializers import TodoSerializer
+
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+@api_view (['GET', 'POST'])
+def todo_list(request):
+    if request.method == 'GET':
+        todo = Todo.objects.all()
+        serializer = TodoSerializer(todo, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = TodoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+-STATUS CODES: https://www.django-rest-framework.org/api-guide/status-codes/
+
+-Acesse o app pela seguinte url: http://127.0.0.1:8000/todo/
+-Digite o seguinte texto no campo Content:
+
+{
+    "name":"Fazer café"
+}
+
+
