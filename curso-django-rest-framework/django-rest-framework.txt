@@ -2,6 +2,14 @@ Curso - Django-Rest_Framework
 
 Documentação: https://www.django-rest-framework.org
 
+IMPORTANTE:
+-Toda vez que fechar o projeto realize o seguinte procedimento para inciar o servidor:
+-Acesse o diretório do projeto: D:\Github\django-rest-framework\curso-django-rest-framework
+-Ative o ambiente virtual: D:\Github\django-rest-framework\curso-django-rest-framework
+-Acesse o diretório do projeto: D:\Github\django-rest-framework\curso-django-rest-framework\api_todo
+-inicie o servidor: python manage.py runserver
+-Pelo browser, digite a seguinte url: http://127.0.0.1:8000/todo/
+
 -Pelo VSCODE, terminal, acesse o diretório do projeto;
 -Crie um ambiente virtual no diretório com o seguinte comando: python -m venv venv
 -Comando para ativar o ambiente virtual: .\venv\Scripts\Activate.ps1
@@ -23,7 +31,7 @@ INSTALLED_APPS = [
     'rest_framework',
 ]
 
--Acesse o diretório do projeto: cd D:\Github\django-rest\curso-django-rest\api_todo
+-Acesse o diretório do projeto: cd D:\Github\django-rest-framework\curso-django-rest-framework\api_todo
 -Digite o seguinte comando para criar a aplicação: python manage.py startapp app
 -No campo INSTALLED_APPS, deixe conforme abaixo:
 
@@ -40,7 +48,7 @@ INSTALLED_APPS = [
     'rest_framework',
 ]
 
--Acesse o diretório do projeto: cd D:\Github\django-rest\curso-django-rest\api_todo\api_todo\app
+-Acesse o diretório do projeto: cd D:\Github\django-rest-framework\curso-django-rest-framework\api_todo\app
 -Edite o arquivo: models.py
 
 from django.db import models
@@ -64,7 +72,7 @@ class Todo(models.Model):
 -Digite: todo.save()
 -Digite: todo.__dict__
 
--Acesse o diretório do projeto: cd D:\Github\django-rest\curso-django-rest\api_todo\api_todo\app
+-Acesse o diretório do projeto: cd D:\Github\django-rest-framework\curso-django-rest-framework\api_todo\app
 -Crie um arquivo: serializers.py
 -Edite o arquivo conforme o texto abaixo: 
 
@@ -83,7 +91,7 @@ class TodoSerializer(serializers.ModelSerializer):
 -Digite: serializer = TodoSerializer(todo)
 -Digite: serializer.data
 
--Edite o arquivo views.py no diretório do projeto: cd D:\Github\django-rest\curso-django-rest\api_todo\api_todo\app
+-Edite o arquivo views.py no diretório do projeto: cd D:\Github\django-rest-framework\curso-django-rest-framework\api_todo\app
 
 from app.models import Todo
 from app.serializers import TodoSerializer
@@ -97,7 +105,7 @@ def todo_list(request):
     serializer = TodoSerializer(todo, many=True)
     return Response(serializer.data)
 
--Acesse o diretório do projeto: cd D:\Github\django-rest\curso-django-rest\api_todo\api_todo\app
+-Acesse o diretório do projeto: cd D:\Github\django-rest-framework\curso-django-rest-framework\api_todo\app
 -Crie um arquivo: urls.py
 -Edite o arquivo conforme o texto abaixo: 
 
@@ -109,7 +117,7 @@ urlpatterns = [
     path('', todo_list)
 ]
 
--Acesse o diretório do projeto: cd D:\Github\django-rest\curso-django-rest\api_todo\api_todo\urls.py
+-Acesse o diretório do projeto: cd D:\Github\django-rest-framework\curso-django-rest-framework\api_todo\api_todo
 -Edite o arquivo: urls.py
 
 """
@@ -139,7 +147,7 @@ urlpatterns = [
 -Comando para iniciar o servidor: python manage.py runserver
 -Acesse o app pela seguinte url: http://127.0.0.1:8000/todo/
 
--Edite o arquivo views.py no diretório do projeto: cd D:\Github\django-rest\curso-django-rest\api_todo\api_todo\app
+-Edite o arquivo views.py no diretório do projeto: cd D:\Github\django-rest-framework\curso-django-rest-framework\api_todo\app
 
 from app.models import Todo
 from app.serializers import TodoSerializer
